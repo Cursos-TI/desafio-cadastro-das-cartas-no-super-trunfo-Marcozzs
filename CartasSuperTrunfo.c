@@ -28,7 +28,7 @@ int main(){
 
     printf("Qual o código: ", codigo_da_carta1);
     scanf("%s", &codigo_da_carta1);
-    getchar();
+    getchar(); //Limpeza do buffer, para rodar normalmente o próximo fgets
 
     printf("Qual o nome da cidade: ", nome_da_cidade1);
     fgets(nome_da_cidade1, 50, stdin);
@@ -44,7 +44,7 @@ int main(){
 
     printf("Qual o número de Pontos Turísiticos: ", numero_de_pontos_turisticos1);
     scanf("%d", &numero_de_pontos_turisticos1);
-    getchar();
+    getchar(); //Limpeza do buffer, para rodar normalmente o próximo fgets
 
     //CARTA 2:
     printf("\nVamos cadastrar a segunda carta!\n");
@@ -54,7 +54,7 @@ int main(){
 
     printf("Qual o código: ", codigo_da_carta2);
     scanf("%s", &codigo_da_carta2);
-    getchar();
+    getchar(); //Limpeza do buffer, para rodar normalmente o próximo fgets
 
     printf("Qual o nome da cidade: ", nome_da_cidade2);
     fgets(nome_da_cidade2, 20, stdin);
@@ -70,9 +70,9 @@ int main(){
 
     printf("Qual o número de Pontos Turísiticos: ", numero_de_pontos_turisticos2);
     scanf("%d", &numero_de_pontos_turisticos2);
-    getchar();
+    getchar(); //Limpeza do buffer, para rodar normalmente o próximo fgets
 
-    //RESULTADO FINAL:
+    //RESULTADO CARTA 1:
     printf("\nCarta 1:\n");
     printf("Estado:%s", estado1);
     printf("Código:%s\n", codigo_da_carta1);
@@ -82,6 +82,7 @@ int main(){
     printf("PIB:%f\n", pib1);
     printf("Número de Pontos Turísticos:%d\n", numero_de_pontos_turisticos1);
 
+    //RESULTADO CARTA 2:
     printf("\nCarta 2:\n");
     printf("Estado:%s", estado2);
     printf("Código:%s\n", codigo_da_carta2);
