@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 int main(){
 
@@ -6,7 +7,7 @@ int main(){
     char estado1[20];
     char codigo_da_carta1[6];
     char nome_da_cidade1[50];
-    unsigned int populacao1;
+    int populacao1;
     float area_em_km1;
     float pib1;
     int numero_de_pontos_turisticos1;
@@ -15,24 +16,36 @@ int main(){
     char estado2[20];
     char codigo_da_carta2[6];
     char nome_da_cidade2[20];
-    unsigned int populacao2;
+    int populacao2;
     float area_em_km2;
     float pib2;
     int numero_de_pontos_turisticos2;
+
+    // //MOCK CARTA I
+    // populacao1 = 6000000;
+    // strcpy(nome_da_cidade1, "São Paulo");
+    // strcpy(estado1, "SP");
+
     
+    // //MOCK CARTA 2
+    // populacao2 = 12300000;
+    // strcpy(nome_da_cidade2, "Rio de Janeiro");
+    // strcpy(estado2, "RJ");    
 
     //CARTA 1:
     printf("Vamos cadastrar a primeira carta!\n");
 
-    printf("Qual a sigla do estado: ", estado1);
+    printf("Qual a sigla do Estado: ", estado1);
     fgets(estado1,20, stdin);
+    estado1[strcspn(estado1, "\n")] = 0;
 
-    printf("Qual o código: ", codigo_da_carta1);
+    printf("Qual seria o código: ", codigo_da_carta1);
     scanf("%s", &codigo_da_carta1);
     getchar();
 
     printf("Qual o nome da cidade: ", nome_da_cidade1);
     fgets(nome_da_cidade1, 50, stdin);
+    nome_da_cidade1[strcspn(nome_da_cidade1, "\n")] = 0;
 
     printf("Qual é a populacão (sem pontos): ", populacao1);
     scanf("%d", &populacao1);
@@ -57,15 +70,17 @@ int main(){
     //CARTA 2:
     printf("\nVamos cadastrar a segunda carta!\n");
 
-    printf("Qual a sigla do estado: ", estado2);
+    printf("Qual a sigla do Estado: ", estado2);
     fgets(estado2, 20, stdin);
+    estado2[strcspn(estado2, "\n")] = 0;
 
-    printf("Qual o código: ", codigo_da_carta2);
+    printf("Qual seria o código: ", codigo_da_carta2);
     scanf("%s", &codigo_da_carta2);
     getchar();
 
     printf("Qual o nome da cidade: ", nome_da_cidade2);
     fgets(nome_da_cidade2, 20, stdin);
+    nome_da_cidade2[strcspn(nome_da_cidade2, "\n")] = 0;
 
     printf("Qual é a populacão (sem pontos): ", populacao2);
     scanf("%d", &populacao2);
@@ -93,7 +108,7 @@ int main(){
     printf("Código:%s\n", codigo_da_carta1);
     printf("Nome da Cidade:%s", nome_da_cidade1);
     printf("Populacão:%d\n", populacao1);
-    printf("Área:%.2f\n", area_em_km1);
+    printf("Área:%.2f km²\n", area_em_km1);
     printf("PIB:%.2f\n", pib1);
     printf("Número de Pontos Turísticos:%d\n", numero_de_pontos_turisticos1);
     printf("Densidade Populacional:%.2f\n", densidade_populacional1);
@@ -104,7 +119,7 @@ int main(){
     printf("Código:%s\n", codigo_da_carta2);
     printf("Nome da Cidade:%s", nome_da_cidade2);
     printf("Populacão:%d\n", populacao2);
-    printf("Área: %.2f\n", area_em_km2);
+    printf("Área: %.2f km²\n", area_em_km2);
     printf("PIB:%.2f\n", pib2);
     printf("Número de Pontos Turísticos:%d\n", numero_de_pontos_turisticos2);
     printf("Densidade Populacional: %.2f\n", densidade_populacional2);
@@ -120,7 +135,7 @@ int main(){
     int pibpercapita1Maior = pib_per_capita1 > pib_per_capita2;
     int superpoder1Maior = super_poder1 > super_poder2;
 
-    int printValor = 2; 
+    int printValor = 2;
 
     printf("\nCOMPARACAO DAS CARTAS:\n");
     printf("Populacão: Carta %d venceu (%d)\n", printValor-populacao1Maior, populacao1Maior);
@@ -130,6 +145,18 @@ int main(){
     printf("Densidade Populacional: Carta %d venceu (%d)\n", printValor-densidade1Maior, densidade1Maior);
     printf("PIB per Capita: Carta %d venceu (%d)\n", printValor-pibpercapita1Maior, pibpercapita1Maior);
     printf("Super Poder: Carta %d venceu (%d)\n", printValor-superpoder1Maior, superpoder1Maior);
+    
+    printf("\nComparação de cartas ( Atributo: População):\n");
+
+    printf("Carta 1 - %s (%s): %d\n", nome_da_cidade1, estado1, populacao1);
+    printf("Carta 2 - %s (%s): %d\n", nome_da_cidade2, estado2, populacao2);
+
+    if(populacao1 > populacao2){
+        
+        printf("Resultado: Carta 1 - %s: venceu!\n", nome_da_cidade1);
+    }else {
+        printf("Resultado: Carta 2 - %s: venceu!\n", nome_da_cidade2);
+    }
     
     return 0;
 }
