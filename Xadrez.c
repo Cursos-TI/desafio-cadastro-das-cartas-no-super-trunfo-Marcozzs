@@ -1,31 +1,44 @@
 #include <stdio.h>
 
-int main() {
-    int casasTorre = 5;
-    int casasBispo = 5;
-    int casasRainha = 8;
+int main()
+{
 
-    // Movimento da Torre - FOR
-    printf("A TORRE SE MOVIMENTARÁ 5X PARA A DIREITA\n");
-    for (int t = 1; t <= casasTorre; t++) {
-        printf("DIREITA\n");
+    int torre = 1;  // DIREITA
+    int bispo = 1;  // CIMA DIREITA
+    int rainha = 1; // ESQUERDA
+
+    // FOR
+    printf("\nA torre andará 5x para a direita\n");
+    for (int torre = 1; torre <= 5; torre++)
+    {
+        printf("Direita\n");
     }
-
-    // Movimento do Bispo - WHILE
-    printf("\nO BISPO SE MOVIMENTARÁ 5X PARA CIMA-DIREITA\n");
-    int b = 1;
-    while (b <= casasBispo) {
-        printf("CIMA DIREITA\n");
-        b++;
+    // WHILE
+    printf("\nO bispo andará 5x para a cima direita - diagonal\n");
+    while (bispo <= 5)
+    {
+        printf("Cima Direita\n");
+        bispo++;
     }
+    // DO WHILE
+    printf("\nA rainha andará 8x para a esquerda\n");
+    do
+    {
+        printf("Esquerda\n");
+        rainha++;
+    } while (rainha <= 8);
 
-    // Movimento da Rainha - DO-WHILE
-    printf("\nA RAINHA SE MOVIMENTARÁ 8X PARA A ESQUERDA\n");
-    int r = 1;
-    do {
-        printf("ESQUERDA\n");
-        r++;
-    } while (r <= casasRainha);
+    // CAVALO 
+    int passos = 0;
 
+    printf("\nO cavalo andará\n");
+    for (int i = 0; i < 1; i++){
+        while ( passos < 2){
+            printf("Baixo\n");
+            passos++;
+        }
+        printf("Esquerda\n");
+
+    }
     return 0;
 }
