@@ -1,0 +1,263 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+// Definição da constante para o tamanho máximo do inventário
+#define CAPACIDADE_MAXIMA 10
+
+/**
+ * @brief Estrutura para representar um item no inventário.
+ * * Armazena as informações essenciais de cada objeto coletado pelo jogador.
+ */
+typedef struct {
+    char nome[30];      ///< Nome do item (ex: Faca, Bala 5.56, Kit Médico)
+    char tipo[20];      ///< Tipo do item (ex: arma, munição, cura, ferramenta)
+    int quantidade;     ///< Quantidade de unidades deste item
+} Item;
+
+// Variáveis globais para o inventário e o controle de itens
+Item inventario[CAPACIDADE_MAXIMA]; // Vetor de structs para armazenar os itens
+int totalItens = 0;                 // Contador para o número atual de itens no inventário
+
+/**
+ * @brief Exibe o menu principal do sistema de inventário.
+ */
+void exibirMenu() {
+    printf("\n--- MOCHILA INICIAL DE LOOT ---\n");
+    printf("Itens na mochila: %d/%d\n", totalItens, CAPACIDADE_MAXIMA);
+    printf("1. Cadastrar Novo Item (Coletar)\n");
+    printf("2. Remover Item (Descartar)\n");
+    printf("3. Listar Todos os Itens\n");
+    printf("4. Buscar Item por Nome\n");
+    printf("0. Sair do Jogo\n");
+    printf("Escolha uma opção: ");
+}
+
+/**
+ * @brief Lista todos os itens atualmente registrados no inventário.
+ * * Itera sobre o vetor de structs e exibe os dados (Nome, Tipo, Quantidade)
+ * de cada item.
+ */
+void listarItens() {
+    printf("\n--- ITENS NA MOCHILA ---\n");
+
+    // Verifica se a mochila está vazia
+    if (totalItens == 0) {
+        printf("A mochila está vazia. Colete alguns itens!\n");
+        return;
+    }
+
+    // Tabela para exibição clara
+    printf("---------------------------------------------------\n");
+    printf("| %-3s | %-28s | %-18s | %-10s |\n", "ID", "NOME", "TIPO", "QUANTIDADE");
+    printf("---------------------------------------------------\n");
+
+    // Laço 'for' para percorrer o vetor de itens
+    for (int i = 0; i < totalItens; i++) {
+        // Exibe os dados de cada item
+        printf("| %-3d | %-28s | %-18s | %-10d |\n", 
+               i + 1, 
+               inventario[i].nome, 
+               inventario[i].tipo, 
+               inventario[i].quantidade);
+    }
+    printf("---------------------------------------------------\n");
+}
+
+/**
+ * @brief Cadastra um novo item no inventário.
+ * * Solicita nome, tipo e quantidade do item. Se houver espaço, adiciona
+ * o novo Item à próxima posição livre do vetor e incrementa totalItens.
+ */
+void inserirItem() {
+    printf("\n--- CADASTRAR NOVO ITEM ---\n");
+
+    // Verifica se a capacidade máxima foi atingida
+    if (totalItens >= CAPACIDADE_MAXIMA) {
+        printf("Mochila cheia! Não é possível coletar mais itens.\n");
+        return;
+    }
+
+    // Leitura de dados para o novo item
+    
+    // Ponteiro para o novo Item na próxima posição livre do vetor
+    Item *novoItem = &inventario[totalItens]; 
+
+    printf("Nome do item (max 29 caracteres): ");
+    // Uso de scanf("%s") para capturar a string de forma simples
+    if (scanf("%29s", novoItem->nome) != 1) {
+        // Limpa o buffer em caso de erro na leitura
+        while (getchar() != '\n'); 
+        printf("Erro na leitura do nome. Tente novamente.\n");
+        return;
+    }
+    
+    printf("Tipo do item (ex: arma, munição, cura): ");
+    if (scanf("%19s", novoItem->tipo) != 1) {
+        while (getchar() != '\n');
+        printf("Erro na leitura do tipo. Tente novamente.\n");
+        return;
+    }
+
+    printf("Quantidade: ");
+    if (scanf("%d", &novoItem->quantidade) != 1) {
+        // Limpa o buffer e evita loop infinito ou dados incorretos
+        while (getchar() != '\n'); 
+        printf("Erro na leitura da quantidade. Apenas números inteiros são aceitos.\n");
+        return;
+    }
+    
+    // Atualiza o contador de itens
+    totalItens++; 
+
+    printf("\n[SUCESSO] Item '%s' cadastrado na mochila!\n", novoItem->nome);
+    listarItens(); // Lista após cada operação, conforme requisito
+}
+
+/**
+ * @brief Remove um item do inventário com base no nome.
+ * * Implementa uma busca sequencial e, ao encontrar o item, realiza o 'shift'
+ * dos elementos subsequentes no vetor para preencher o espaço vazio.
+ * * @param nomeBusca O nome do item a ser removido.
+ */
+void removerItem() {
+    printf("\n--- REMOVER ITEM (DESCARTAR) ---\n");
+
+    if (totalItens == 0) {
+        printf("A mochila está vazia. Nada para remover.\n");
+        return;
+    }
+    
+    char nomeBusca[30];
+    printf("Digite o NOME do item que deseja remover: ");
+    if (scanf("%29s", nomeBusca) != 1) {
+        while (getchar() != '\n');
+        printf("Erro na leitura do nome.\n");
+        return;
+    }
+
+    int indiceRemover = -1; // Usado para armazenar o índice do item a ser removido
+
+    // 1. BUSCA SEQUENCIAL para encontrar o índice do item
+    // Laço 'for' para percorrer o vetor
+    for (int i = 0; i < totalItens; i++) {
+        // Compara o nome da busca com o nome do item atual (case-sensitive)
+        if (strcmp(inventario[i].nome, nomeBusca) == 0) {
+            indiceRemover = i; // Item encontrado
+            break;             // Encerra a busca assim que o primeiro for encontrado
+        }
+    }
+
+    // 2. REMOÇÃO e SHIFT
+    if (indiceRemover != -1) {
+        printf("[CONFIRMADO] Item '%s' encontrado. Removendo...\n", inventario[indiceRemover].nome);
+        
+        // Loop para realizar o 'shift' (deslocamento) dos itens
+        // Move todos os itens *após* o item removido uma posição para trás
+        for (int i = indiceRemover; i < totalItens - 1; i++) {
+            // Copia o item da posição i+1 para a posição i
+            inventario[i] = inventario[i + 1];
+        }
+
+        totalItens--; // Decrementa o contador de itens
+
+        printf("[SUCESSO] Item '%s' removido da mochila!\n", nomeBusca);
+        listarItens(); // Lista após cada operação, conforme requisito
+    } else {
+        printf("[ERRO] Item com o nome '%s' não encontrado na mochila.\n", nomeBusca);
+    }
+}
+
+/**
+ * @brief Implementa a busca sequencial por um item no inventário com base no nome.
+ * * Percorre o vetor e, se encontrar o item, exibe seus dados.
+ */
+void buscarItem() {
+    printf("\n--- BUSCA SEQUENCIAL POR ITEM ---\n");
+
+    if (totalItens == 0) {
+        printf("A mochila está vazia. Nada para buscar.\n");
+        return;
+    }
+    
+    char nomeBusca[30];
+    printf("Digite o NOME do item que deseja buscar: ");
+    if (scanf("%29s", nomeBusca) != 1) {
+        while (getchar() != '\n');
+        printf("Erro na leitura do nome.\n");
+        return;
+    }
+    
+    int encontrado = 0; // Flag para indicar se o item foi encontrado
+
+    // Laço 'for' para percorrer o vetor de structs
+    for (int i = 0; i < totalItens; i++) {
+        // Compara o nome da busca com o nome do item atual
+        if (strcmp(inventario[i].nome, nomeBusca) == 0) {
+            
+            printf("\n[ITEM ENCONTRADO] Dados:\n");
+            printf("----------------------------------------\n");
+            printf("Nome:       %s\n", inventario[i].nome);
+            printf("Tipo:       %s\n", inventario[i].tipo);
+            printf("Quantidade: %d\n", inventario[i].quantidade);
+            printf("Posição:    %d\n", i + 1);
+            printf("----------------------------------------\n");
+            
+            encontrado = 1; // Item encontrado
+            break;          // Encerra a busca sequencial
+        }
+    }
+
+    if (!encontrado) {
+        printf("\n[RESULTADO] Item com o nome '%s' NÃO foi encontrado na mochila.\n", nomeBusca);
+    }
+}
+
+
+/**
+ * @brief Função principal que contém o loop do menu do jogo.
+ */
+int main() {
+    int opcao;
+
+    printf("### INVENTÁRIO DE SOBREVIVÊNCIA INICIAL ###\n");
+    printf("Prepare sua mochila para a primeira missão!\n");
+
+    // Laço 'do-while' para manter o menu ativo até que o jogador escolha 'Sair'
+    do {
+        exibirMenu(); // Exibe as opções
+        
+        // Leitura da opção, com tratamento de erro básico
+        if (scanf("%d", &opcao) != 1) {
+            // Limpa o buffer para evitar loop infinito
+            while (getchar() != '\n'); 
+            printf("\n[ERRO] Entrada inválida. Por favor, digite um número de opção.\n");
+            opcao = -1; // Define uma opção inválida para continuar o loop
+            continue;   // Volta ao início do loop
+        }
+
+        // Estrutura 'switch' para lidar com as opções do menu
+        switch (opcao) {
+            case 1:
+                inserirItem();
+                break;
+            case 2:
+                removerItem();
+                break;
+            case 3:
+                listarItens();
+                break;
+            case 4:
+                buscarItem();
+                break;
+            case 0:
+                printf("\n[SAÍDA] Inventário organizado. Boa sorte na missão!\n");
+                break;
+            default:
+                printf("\n[ALERTA] Opção inválida. Tente novamente.\n");
+        }
+        
+    } while (opcao != 0); // Condição de parada
+
+    return 0; // Fim do programa
+}
